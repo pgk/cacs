@@ -30,6 +30,19 @@ class CASimulator
 
     @state
 
+  reset: (o={}) ->
+    @len = o.len if o.len?
+    @seed = @_initSeed()
+    @_initState()
+
+  setRule: (rule) ->
+    set = ['111', '110', '101', '100', '011', '010', '001', '000']
+    rules = rule.split('')
+    for ruleKey, i in set
+      @rule[ruleKey] = parseInt(rules[i])
+    @
+
+
   _initState: ->
     @state = []
     @state.push(i) for i in @seed

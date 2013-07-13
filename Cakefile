@@ -2,17 +2,26 @@ fs     = require 'fs'
 {exec} = require 'child_process'
 util   = require 'util'
 
+OUTDIR = 'patches'
 
-task 'cajs:build', 'Build cajs max Javascript External', ->
+task 'build', 'Build cajs max Javascript External', ->
   util.log "Building cajs"
-  exec "coffee --bare --output patches --compile src/ca.coffee"
+  exec "coffee --compile --bare --join cacs.js --output patches src/ca.coffee src/cacs.coffee"
     , (err, stdout, stderr) ->
-    if err?
-      util.log err
-    else
-      util.log "Compiled cacs"
+      console.log stderr, stdout, err
+      if err?
+        util.log err
+      else
+        util.log "Compiled cacs"
 
 REPORTER = "min"
+
+task "clean", "Clean all build products", ->
+  util.log "Cleaning cacs"
+  i = exec "ls -alF"
+
+  i.on 'close', (p)->
+    util.log p 
 
 task "test", "run tests", ->
   exec "NODE_ENV=test 
