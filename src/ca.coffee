@@ -1,5 +1,5 @@
 
-
+RULESET = ['111', '110', '101', '100', '011', '010', '001', '000']
 
 class CASimulator
 
@@ -14,9 +14,7 @@ class CASimulator
     '000': 0
 
   constructor: (o={}) ->
-    @len =  if o.len? then o.len else 10
-    @seed = if o.seed? then o.seed else @_initSeed()
-    @_initState()
+    @reset o
 
   next: ->
     [oldState, pos] = [(i for i in @state), 0]
@@ -31,14 +29,18 @@ class CASimulator
     @state
 
   reset: (o={}) ->
-    @len = o.len if o.len?
-    @seed = @_initSeed()
+    if o.seed?
+      @len = o.seed.length
+      @seed = o.seed
+    else
+      @len = if o.len? then o.len else @len || 10
+      @seed = @_initSeed()
+
     @_initState()
 
   setRule: (rule) ->
-    set = ['111', '110', '101', '100', '011', '010', '001', '000']
     rules = rule.split('')
-    for ruleKey, i in set
+    for ruleKey, i in RULESET
       @rule[ruleKey] = parseInt(rules[i])
     @
 
